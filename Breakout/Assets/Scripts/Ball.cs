@@ -5,24 +5,28 @@ using System;
 using Random = UnityEngine.Random;
 
 public class Ball : MonoBehaviour {
+    public Action<GameObject> OnBallCollision; //subscription channel
+    [Range (5, 30)] public float Speed;
 
-    [SerializeField] private float m_Speed;
-    [SerializeField][Range (0.1f, 1)] private float m_MinSpeedMultipler;
+    [Range (0.01f, 0.2f)] private float m_RandomMoveFactor = 0.1f;
     private Rigidbody2D _ballBody;
 
-    public static Action OnBallCollision;
-
-    void Start () {
+    private void Awake () {
         _ballBody = GetComponent<Rigidbody2D> ();
-
-        Vector2 randomVelocity = Random.insideUnitCircle;
-        randomVelocity.x = Mathf.Clamp (randomVelocity.x, m_MinSpeedMultipler, 1);
-        randomVelocity.y = Mathf.Clamp (randomVelocity.y, m_MinSpeedMultipler, 1);
-
-        _ballBody.velocity = randomVelocity * m_Speed;
     }
 
-    private void OnCollisionEnter2D (Collision2D other) {
-        OnBallCollision?.Invoke ();
+    public void StartMoving (Vector2 direction) {
+        _ballBody.velocity = direction.normalized * Speed;
+    }
+
+    private void OnCollisionExit2D (Collision2D other) {
+        OnBallCollision?.Invoke (other.gameObject);
+
+        //to prevent looping movements
+        Vector2 newVelocity = _ballBody.velocity.normalized;
+        newVelocity.x += Random.Range (-m_RandomMoveFactor, m_RandomMoveFactor);
+        newVelocity.y += Random.Range (-m_RandomMoveFactor, m_RandomMoveFactor);
+
+        _ballBody.velocity = newVelocity.normalized * Speed;
     }
 }
