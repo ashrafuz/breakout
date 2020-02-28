@@ -13,7 +13,7 @@ public class Paddle : MonoBehaviour {
     void Start () {
         _mainCam = Camera.main;
         _paddleWidth = GetComponent<SpriteRenderer> ().bounds.size.x;
-        _boundary = new Boundary (_mainCam, _paddleWidth);
+        _boundary = new Boundary (_mainCam, _paddleWidth * 0.75f);
 
         GameManager.OnGameStart += OnGameStart;
     }

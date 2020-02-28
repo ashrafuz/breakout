@@ -12,29 +12,29 @@ public class BrickSpawner : MonoBehaviour {
     private Boundary _boundary;
     private float _elapsedTime = 0;
 
-    private List<Brick> _idleBrickPool = new List<Brick> ();
-    private List<Vector2> _idlePositionPool = new List<Vector2> ();
+    private List<Brick> _brickPool = new List<Brick> ();
 
     private GameManager _gameManager;
 
     void Start () {
         InitalizeBoundary ();
-        InitializeSpawnPositions ();
+        SpawnAllBricks ();
         GameManager.OnGameStart += OnGameStart;
     }
 
-    private void InitializeSpawnPositions () {
+    private void SpawnAllBricks () {
         Vector2 brickSize = m_BrickPrefab.GetComponent<SpriteRenderer> ().bounds.size;
         //Assumption: Only Top half is allowed for spawning
         Vector2 startPos = new Vector2 (0, 0);
+        Vector2 offset = brickSize * 0.5f;
 
-        while ((startPos.y + brickSize.y * 0.5f) < _boundary.Top) {
-            _idlePositionPool.Add (startPos);
-            _idlePositionPool.Add (new Vector2 (-startPos.x, startPos.y));
+        while ((startPos.y + offset.y) < _boundary.Top) {
+            _brickPool.Add (SpawnNewAt (startPos));
+            _brickPool.Add (SpawnNewAt (new Vector2 (-startPos.x, startPos.y)));
 
             startPos.x += brickSize.x + m_Padding;
-            if ((startPos.x + brickSize.x * 0.5f) > _boundary.Right) {
-                startPos.x = 0;
+            if ((startPos.x + offset.y) > _boundary.Right) {
+                startPos.x = 0; //start new row
                 startPos.y += brickSize.y + m_Padding;
             }
         }
@@ -48,48 +48,40 @@ public class BrickSpawner : MonoBehaviour {
 
     private void OnGameStart (GameManager gm) {
         _gameManager = gm;
-        SpawnBrick ();
+        SpawnRandom ();
     }
 
     private void Update () {
         if (_gameManager == null) { return; }
 
-        if (_gameManager.IsRunning && _idlePositionPool.Count > 0) {
+        if (_gameManager.IsRunning) {
             _elapsedTime += Time.deltaTime;
             if (_elapsedTime >= m_SpawnFrequecyInSeconds) {
                 _elapsedTime = 0;
-                SpawnBrick ();
+                SpawnRandom ();
             }
         }
     }
 
-    private Brick SpawnBrick () {
-        Vector2 pos = _idlePositionPool[Random.Range (0, _idlePositionPool.Count)];
-        _idlePositionPool.Remove (pos);
+    private Brick SpawnNewAt (Vector2 pos, bool hide = true) {
+        Brick brickToSpawn = Instantiate (m_BrickPrefab, this.transform);
+        brickToSpawn.transform.position = (Vector2) pos;
+        brickToSpawn.gameObject.SetActive (!hide);
 
-        Brick brickToSpawn = null;
-        if (_idleBrickPool.Count > 0) {
-            brickToSpawn = _idleBrickPool[0];
-            _idleBrickPool.Remove (brickToSpawn);
-        } else {
-            brickToSpawn = Instantiate (m_BrickPrefab, this.transform);
-            brickToSpawn.SetSpawner (this);
-        }
-
-        brickToSpawn.transform.position = pos;
-        brickToSpawn.gameObject.SetActive (true);
+        _brickPool.Add (brickToSpawn);
         return brickToSpawn;
     }
 
-    public void RemoveSelf (Brick brick) {
-        if (!_idleBrickPool.Contains (brick)) { //just for safety
-            _idleBrickPool.Add (brick);
+    private void SpawnRandom () {
+        List<int> idleIndices = new List<int> ();
+        for (int i = 0; i < _brickPool.Count; i++) {
+            if (!_brickPool[i].gameObject.activeInHierarchy) {
+                idleIndices.Add (i);
+            }
         }
 
-        if (!_idlePositionPool.Contains (brick.transform.position)) { //just for safety
-            _idlePositionPool.Add (brick.transform.position);
+        if (idleIndices.Count > 0) {
+            _brickPool[idleIndices[Random.Range (0, idleIndices.Count)]].gameObject.SetActive (true);
         }
-
-        brick.gameObject.SetActive (false);
     }
 }
