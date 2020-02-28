@@ -1,21 +1,20 @@
 ﻿using UnityEngine;
 
 public struct Boundary {
-
     public float Left;
     public float Right;
     public float Top;
     public float Bot;
 
     public Boundary (Camera mc, float padding = 0) {
-        Left = GameUtil.GetLeftBoundary (mc) + padding;
-        Right = GameUtil.GetRightBoundary (mc) - padding;
-        Top = GameUtil.GetTopBoundary (mc) - padding;
-        Bot = GameUtil.GetBotBoundary (mc) + padding;
+        Left = Helper.GetLeftBoundary (mc) + padding;
+        Right = Helper.GetRightBoundary (mc) - padding;
+        Top = Helper.GetTopBoundary (mc) - padding;
+        Bot = Helper.GetBotBoundary (mc) + padding;
     }
 }
 
-public static class GameUtil {
+public static class Helper {
 
     public static float GetLeftBoundary (Camera mainCam) {
         return mainCam.ScreenToWorldPoint (Vector2.zero).x;

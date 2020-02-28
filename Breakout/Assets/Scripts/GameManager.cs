@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour {
 
             newBall.OnBallCollision += OnCollisionOfBall;
 
-            Vector2 dir = new Vector2 (0, newBall.Speed);
+            Vector2 dir = new Vector2 (Random.Range (-1, 1), newBall.Speed);
             newBall.transform.position = Vector2.zero;
             newBall.StartMoving (dir);
         } else {
