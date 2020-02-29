@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using Zenject;
 
-namespace WithZenject {
-    public class Paddle : MonoBehaviour, ILateDisposable {
+namespace WithZenject
+{
+    public class Paddle : MonoBehaviour, ILateDisposable
+    {
         private Camera _mainCam;
         private Boundary _boundary;
         private float _currentMousePosX = 0;
@@ -11,36 +13,43 @@ namespace WithZenject {
         private SignalBus _signalBus;
 
         [Inject]
-        public void Construct (SignalBus signal) {
+        public void Construct(SignalBus signal)
+        {
             _signalBus = signal;
         }
 
-        void Start () {
+        void Start()
+        {
             _mainCam = Camera.main;
 
-            float paddleWidth = GetComponent<SpriteRenderer> ().bounds.size.x;
-            _boundary = new Boundary (_mainCam, paddleWidth * 0.75f);
+            float paddleWidth = GetComponent<SpriteRenderer>().bounds.size.x;
+            _boundary = new Boundary(_mainCam, paddleWidth * 0.75f);
 
-            _signalBus.Subscribe<GameStartedSignal> (OnGameStart);
+            _signalBus.Subscribe<GameStartedSignal>(OnGameStart);
         }
 
-        void OnGameStart () {
+        void OnGameStart()
+        {
             _hasStarted = true;
         }
 
-        private void Update () {
-            if (_hasStarted) {
-                _currentMousePosX = _mainCam.ScreenToWorldPoint (Input.mousePosition).x;
-                _currentMousePosX = Mathf.Clamp (_currentMousePosX, _boundary.Left, _boundary.Right);
+        private void Update()
+        {
+            if (_hasStarted)
+            {
+                _currentMousePosX = _mainCam.ScreenToWorldPoint(Input.mousePosition).x;
+                _currentMousePosX = Mathf.Clamp(_currentMousePosX, _boundary.Left, _boundary.Right);
             }
         }
 
-        void FixedUpdate () {
-            transform.position = new Vector2 (_currentMousePosX, transform.position.y);
+        void FixedUpdate()
+        {
+            transform.position = new Vector2(_currentMousePosX, transform.position.y);
         }
 
-        public void LateDispose () {
-            _signalBus.Unsubscribe<GameStartedSignal> (OnGameStart);
+        public void LateDispose()
+        {
+            _signalBus.Unsubscribe<GameStartedSignal>(OnGameStart);
         }
     }
 

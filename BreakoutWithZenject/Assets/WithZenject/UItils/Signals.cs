@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 
-namespace WithZenject {
+namespace WithZenject
+{
     public class GameStartedSignal { }
-    public class BallCollidedSignal {
+    public class BallCollidedSignal
+    {
         public GameObject CollidedWith;
     }
 
-    public class NewScoreUpdateSignal {
+    public class NewScoreUpdateSignal
+    {
         public int NewScore;
     }
 }

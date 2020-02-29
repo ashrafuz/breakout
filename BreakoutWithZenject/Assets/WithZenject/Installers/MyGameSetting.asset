@@ -29,7 +29,7 @@ MonoBehaviour:
       Padding: 0.26
       SpawnFrequency: 3.4
     Individual:
-      BrickColor: {r: 0.98039216, g: 0, b: 0.68095803, a: 1}
+      BrickColor: {r: 0.98039216, g: 0.59662926, b: 0, a: 1}
   GameController:
     MinRandomPoint: 10
     MaxRandomPoint: 20
