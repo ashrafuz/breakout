@@ -26,8 +26,8 @@ MonoBehaviour:
   BrickSetting:
     Spawner:
       Margin: 0.2
-      Padding: 0.26
-      SpawnFrequency: 3.4
+      Padding: 0.2
+      SpawnFrequency: 2.4
     Individual:
       BrickColor: {r: 0.98039216, g: 0.59662926, b: 0, a: 1}
   GameController:

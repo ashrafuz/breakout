@@ -8,7 +8,7 @@ namespace WithZenject
 {
     public class Brick : MonoBehaviour
     {
-        public Settings _settings;
+        private Settings _settings;
 
         private SpriteRenderer _spriteRenderer;
         [Inject]

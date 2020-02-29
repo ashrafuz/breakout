@@ -2,7 +2,6 @@
 
 namespace WithZenject
 {
-
     public struct Boundary
     {
         public float Left;
