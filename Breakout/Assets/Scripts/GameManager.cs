@@ -65,7 +65,7 @@ namespace WithoutDI
                 return;
             }
 
-            //Assumption: Only brick collision adds point.
+            //Assumption: Only brick & paddle collisions adds point.
             if (collidedWith.GetComponent<Paddle>() != null || collidedWith.GetComponent<Brick>() != null)
             {
                 _playerScore += Random.Range(5, 20);
