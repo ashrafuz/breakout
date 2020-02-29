@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 
 namespace WithZenject
 {
-
     public class BrickManager : ITickable, ILateDisposable
     {
 
@@ -24,8 +23,7 @@ namespace WithZenject
             _settings = settings;
             _signal = signal;
             _brickFactory = brickFactory;
-            _elapsedTime = 0;
-            _boundary = new Boundary(Camera.main, _settings.Margin); //not sure its the best idea
+            _boundary = new Boundary(Camera.main, _settings.Margin);
 
             _signal.Subscribe<GameStartedSignal>(OnGameStart);
             SpawnAllBricks();
@@ -34,6 +32,7 @@ namespace WithZenject
         private void OnGameStart()
         {
             _hasStarted = true;
+            SpawnRandom();
         }
 
         private void SpawnAllBricks()
@@ -47,9 +46,8 @@ namespace WithZenject
 
             while ((startPos.y + offset.y) < _boundary.Top)
             {
-
-                if (dummy != null)
-                { //first one  is already created
+                if (dummy != null) //first one  is already created
+                {
                     dummy.transform.position = startPos;
                     dummy = null;
                 }
@@ -58,8 +56,8 @@ namespace WithZenject
                     SpawnNew(startPos);
                 }
 
-                if (startPos.x != 0)
-                { // mirror brick
+                if (startPos.x != 0)// mirror brick, spawning on both sides
+                {
                     SpawnNew(new Vector2(-startPos.x, startPos.y));
                 }
 
@@ -74,7 +72,6 @@ namespace WithZenject
 
         private void SpawnNew(Vector2 pos)
         {
-
             Brick dummy = _brickFactory.Create();
             dummy.transform.position = pos;
             dummy.gameObject.SetActive(false);

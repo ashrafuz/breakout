@@ -19,7 +19,7 @@ MonoBehaviour:
       type: 3}
   BallSetting:
     Spawner:
-      HighestSpawnAllowed: 4
+      MaxSpawnAllowed: 4
     Individual:
       Speed: 10
       RandomMoveFactor: 0.095

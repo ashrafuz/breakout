@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace WithZenject
 {
-
     public class BallManager
     {
         readonly List<Ball> _ballPool = new List<Ball>();
@@ -19,7 +18,7 @@ namespace WithZenject
 
         public void SpawnNewBall()
         {
-            if (_ballPool.Count < _settings.HighestSpawnAllowed)
+            if (_ballPool.Count < _settings.MaxSpawnAllowed)
             {
                 _ballPool.Add(_ballFactory.Create());
             }
@@ -29,7 +28,7 @@ namespace WithZenject
         [System.Serializable]
         public class Settings
         {
-            public int HighestSpawnAllowed = 0;
+            public int MaxSpawnAllowed = 0;
         }
     }
 }

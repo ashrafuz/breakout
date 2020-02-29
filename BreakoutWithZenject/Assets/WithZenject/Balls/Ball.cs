@@ -30,7 +30,6 @@ namespace WithZenject
 
         private void OnCollisionExit2D(Collision2D other)
         {
-            //there might be more optimized way to pass this signal
             _signalBus.Fire(new BallCollidedSignal() { CollidedWith = other.gameObject });
 
             //to prevent looping movements

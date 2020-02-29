@@ -104,5 +104,10 @@ namespace WithoutDI
                 _brickPool[idleIndices[Random.Range(0, idleIndices.Count)]].gameObject.SetActive(true);
             }
         }
+
+        private void OnDestroy()
+        {
+            GameManager.OnGameStart -= OnGameStart;
+        }
     }
 }

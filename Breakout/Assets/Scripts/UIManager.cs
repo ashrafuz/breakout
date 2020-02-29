@@ -55,5 +55,10 @@ namespace WithoutDI
             }
         }
 
+        private void OnDestroy()
+        {
+            GameManager.OnGameStart -= OnGameStart;
+        }
+
     }
 }

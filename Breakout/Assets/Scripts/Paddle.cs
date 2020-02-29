@@ -5,11 +5,9 @@ using System;
 
 namespace WithoutDI
 {
-
     public class Paddle : MonoBehaviour
     {
         private Camera _mainCam;
-        private float _paddleWidth = 0;
         private float _currentMousePosX = 0;
         private Boundary _boundary;
         private GameManager _gameManager;
@@ -17,8 +15,8 @@ namespace WithoutDI
         void Start()
         {
             _mainCam = Camera.main;
-            _paddleWidth = GetComponent<SpriteRenderer>().bounds.size.x;
-            _boundary = new Boundary(_mainCam, _paddleWidth * 0.75f);
+            float paddleWidth = GetComponent<SpriteRenderer>().bounds.size.x;
+            _boundary = new Boundary(_mainCam, paddleWidth * 0.75f);
 
             GameManager.OnGameStart += OnGameStart;
         }
@@ -42,6 +40,11 @@ namespace WithoutDI
         private void OnGameStart(GameManager gm)
         {
             _gameManager = gm;
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.OnGameStart -= OnGameStart;
         }
     }
 }

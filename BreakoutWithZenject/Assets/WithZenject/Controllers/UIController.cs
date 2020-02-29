@@ -15,7 +15,7 @@ namespace WithZenject
         private bool _hasStarted;
         private int _uiScore = 0;
         private int _finalScore = 0;
-        private float _elapsedTime;
+        private float _elapsedTime = 0;
 
         private Settings _settings;
 
@@ -24,12 +24,6 @@ namespace WithZenject
         {
             _signalBus = signal;
             _settings = settings;
-        }
-
-        public void LateDispose()
-        {
-            _signalBus.Unsubscribe<GameStartedSignal>(OnGameStart);
-            _signalBus.Unsubscribe<NewScoreUpdateSignal>(OnNewScoreUpdate);
         }
 
         private void Start()
@@ -58,8 +52,8 @@ namespace WithZenject
 
         private void Update()
         {
-            if (_uiScore <= _finalScore)
-            { //we have to animate
+            if (_uiScore <= _finalScore)//we have to animate
+            {
                 _elapsedTime += Time.deltaTime;
                 if (_elapsedTime >= _settings.ScoreUpdateFrequency)
                 {
@@ -68,6 +62,12 @@ namespace WithZenject
                     UpdateScoreText();
                 }
             }
+        }
+
+        public void LateDispose()
+        {
+            _signalBus.Unsubscribe<GameStartedSignal>(OnGameStart);
+            _signalBus.Unsubscribe<NewScoreUpdateSignal>(OnNewScoreUpdate);
         }
 
         [System.Serializable]

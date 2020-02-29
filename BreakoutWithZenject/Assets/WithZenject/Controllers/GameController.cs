@@ -4,13 +4,10 @@ using ModestTree;
 
 namespace WithZenject
 {
-
     public class GameController : IInitializable, ITickable, ILateDisposable
     {
-
         private SignalBus _signalBus;
         private BallManager _ballManager;
-
         private Setting _setting;
 
         private int _playerScore;
